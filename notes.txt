@@ -1,2 +1,7 @@
-./packer validate sonar-docker-template.json
-./packer build sonar-docker-template.json
+docker build ../docker/centos-base/ -t k-gce/centos-base:latest
+
+./packer validate k-base-java9-docker.json
+./packer build    k-base-java9-docker.json
+
+./packer validate k-sonar-docker.json
+./packer build    k-sonar-docker.json
