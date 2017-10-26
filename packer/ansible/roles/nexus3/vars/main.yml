@@ -1,0 +1,9 @@
+---
+# vars file for nexus3
+nexus_url: https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-3.6.0-02-unix.tar.gz
+nexus_version: "{{ nexus_url | regex_search('(nexus-.*[0-9])') }}"
+
+nexus_Xms: 64M
+nexus_Xmx: 192M
+nexus_MaxDirectMemorySize: 190M
+nexus_karaf_data: /opt/sonatype/sonatype-work/nexus3

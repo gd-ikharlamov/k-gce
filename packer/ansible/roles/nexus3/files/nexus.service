@@ -1,0 +1,14 @@
+[Unit]
+Description=nexus service
+After=network.target init-node.service
+
+[Service]
+Type=simple
+LimitNOFILE=65536
+ExecStart=/opt/sonatype/nexus/bin/nexus run
+ExecStop=/opt/sonatype/nexus/bin/nexus stop
+User=nexus
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

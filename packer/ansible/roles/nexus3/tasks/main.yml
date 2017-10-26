@@ -1,0 +1,88 @@
+---
+- name: create nexus user
+  user:
+    name: nexus
+    state: present
+    home: /opt/sonatype/
+
+- name: install JDK
+  yum:
+    name: java-1.8.0-openjdk-headless
+    state: latest
+
+- name: create nexus directory
+  file:
+    path: /opt/sonatype
+    state: directory
+    mode: 0755
+
+- name: install nexus3
+  unarchive:
+    src: "{{ nexus_url }}"
+    dest: /opt/sonatype
+    remote_src: yes
+
+- name: create symlink to nexus folder
+  file:
+    src: "/opt/sonatype/{{ nexus_version }}"
+    dest: /opt/sonatype/nexus
+    state: link
+
+- name: create nexus shared blobs directory
+  file:
+    path: /mnt/efs/nexus/blobs
+    state: directory
+
+- name: create symlink to nexus blobs folder
+  file:
+    src: /mnt/efs/nexus/blobs
+    dest: /opt/sonatype/sonatype-work/nexus3/blobs
+    state: link
+
+- name: set Xms in nexus.vmoptions
+  lineinfile:
+    path: /opt/sonatype/nexus/bin/nexus.vmoptions
+    regexp: "^-Xms"
+    line: "-Xms{{ nexus_Xms }}"
+
+- name: set Xmx in nexus.vmoptions
+  lineinfile:
+    path: /opt/sonatype/nexus/bin/nexus.vmoptions
+    regexp: "^-Xmx"
+    line: "-Xmx{{ nexus_Xmx }}"
+
+- name: set MaxDirectMemorySize in nexus.vmoptions
+  lineinfile:
+    path: /opt/sonatype/nexus/bin/nexus.vmoptions
+    regexp: "^-XX:MaxDirectMemorySize"
+    line: "-XX:MaxDirectMemorySize={{ nexus_MaxDirectMemorySize }}"
+
+- name: set karaf.data in nexus.vmoptions
+  lineinfile:
+    path: /opt/sonatype/nexus/bin/nexus.vmoptions
+    regexp: "^-Dkaraf.data"
+    line: "-Dkaraf.data={{ nexus_karaf_data }}"
+
+- name: change nexus directory owner
+  file:
+    dest: "/opt/sonatype/"
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+- name: change nexus efs directory owner
+  file:
+    dest: /mnt/efs/nexus
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+- name: copy init-node.service
+  copy:
+    src: "{{ role_path }}/files/nexus.service"
+    dest: /etc/systemd/system/
+
+- name: enable nexus service
+  systemd:
+    name: nexus
+    enabled: yes

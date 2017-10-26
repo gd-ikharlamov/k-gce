@@ -1,0 +1,2 @@
+./packer validate sonar-docker-template.json
+./packer build sonar-docker-template.json

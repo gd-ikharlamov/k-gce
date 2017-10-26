@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+      - common
+      - openjdk9
+      - sonar
