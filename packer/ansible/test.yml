@@ -2,5 +2,5 @@
 - hosts: all
   roles:
       - common
-    #   - openjdk9
+      - openjdk9
     #   - sonar

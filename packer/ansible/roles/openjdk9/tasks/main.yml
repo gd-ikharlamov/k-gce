@@ -1,2 +1,18 @@
 ---
-# tasks file for openjdk9
+- name: create jdk 9 directory
+  file:
+    path: "{{ java_dir }}"
+    state: directory
+    mode: 0755
+
+- name: install jdk9
+  unarchive:
+    src: "{{ java_url }}"
+    dest: "{{ java_dir }}"
+    extra_opts: ["--strip=1"]
+    remote_src: yes
+
+- name: copy jdk profile
+  template:
+    src: "{{ role_path }}/templates/jdk9.sh.j2"
+    dest: /etc/profile.d/jdk9.sh

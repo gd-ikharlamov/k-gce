@@ -1,2 +1,3 @@
 ---
-# vars file for openjdk9
+java_dir: "/opt/openjdk9"
+java_url: "http://download.java.net/java/GA/jdk9/9.0.1/binaries/openjdk-9.0.1_linux-x64_bin.tar.gz"
