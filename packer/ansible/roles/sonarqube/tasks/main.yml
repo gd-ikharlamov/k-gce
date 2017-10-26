@@ -1,0 +1,23 @@
+---
+- name: create sonarqube user
+  user:
+    name: sonarqube
+    state: present
+    home: "{{ sonarqube_dir }}"
+
+- name: install sonarqube
+  unarchive:
+    src: "{{ sonarqube_url }}"
+    dest: "{{ sonarqube_dir }}"
+    remote_src: yes
+
+- name: copy sonarqube.service
+  template:
+    src: "{{ role_path }}/templates/sonarqube.service.j2"
+    dest: "/etc/systemd/system/sonarqube.service"
+
+- name: enable sonarqube service
+  systemd:
+    name: sonarqube
+    enabled: yes
+  ignore_errors: yes

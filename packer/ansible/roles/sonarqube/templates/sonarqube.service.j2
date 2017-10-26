@@ -1,0 +1,13 @@
+[Unit]
+Description=SonarQube service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart={{ sonarqube_dir }}/{{ sonarqube_version }}/bin/linux-x86-64/sonar.sh start
+ExecStop={{ sonarqube_dir }}/{{ sonarqube_version }}/bin/linux-x86-64/sonar.sh stop
+User=sonarqube
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

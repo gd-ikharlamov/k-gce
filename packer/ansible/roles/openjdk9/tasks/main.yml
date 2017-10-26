@@ -15,4 +15,4 @@
 - name: copy jdk profile
   template:
     src: "{{ role_path }}/templates/jdk9.sh.j2"
-    dest: /etc/profile.d/jdk9.sh
+    dest: "/etc/profile.d/jdk9.sh"

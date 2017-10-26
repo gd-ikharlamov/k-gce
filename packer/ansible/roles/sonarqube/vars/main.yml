@@ -1,0 +1,5 @@
+---
+# vars file for sonarcube
+sonarqube_dir: "/opt/sonarsource/"
+sonarqube_url: "https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.7.zip"
+sonarqube_version: "{{ sonarqube_url | regex_search('(sonarqube-.*[0-9])') }}"
