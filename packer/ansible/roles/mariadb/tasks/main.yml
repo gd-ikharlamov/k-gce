@@ -2,10 +2,8 @@
 # tasks file for mariadb
 - name: install MariaDB
   yum:
-    name: "{{ item }}"
+    name: mariadb-server
     state: present
-  with_items:
-      - mariadb-server
 
 - name: configure MariaDB
   template: src=sonarqube.cnf.j2 dest=/etc/my.cnf.d/sonarqube.cnf
@@ -14,4 +12,3 @@
   systemd:
     name: mariadb
     enabled: yes
-  ignore_errors: yes

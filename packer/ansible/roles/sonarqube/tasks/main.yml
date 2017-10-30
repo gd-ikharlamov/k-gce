@@ -22,4 +22,3 @@
   systemd:
     name: sonarqube
     enabled: yes
-  ignore_errors: yes

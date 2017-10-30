@@ -3,7 +3,6 @@
   yum:
     name: "*"
     state: latest
-  ignore_errors: yes
 
 - name: install additional packages
   yum:
