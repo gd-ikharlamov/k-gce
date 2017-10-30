@@ -3,15 +3,22 @@
         "type": "docker",
         "image": "k-gce/centos-base:latest",
         "pull": false,
-        "commit": "true"
+        "commit": "true",
+        "run_command": [
+            "-d",
+            "-t",
+            "-i",
+            "--tmpfs", "/run",
+            "--tmpfs", "/tmp",
+            "-v", "/sys/fs/cgroup:/sys/fs/cgroup:ro",
+            "{{.Image}}"
+        ]
     }],
 
     "provisioners": [{
         "type": "ansible",
         "playbook_file": "./ansible/java.yml",
-        "ansible_env_vars": [
-            "ANSIBLE_SSH_ARGS='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes'"
-        ],
+        "ansible_env_vars": [],
         "extra_arguments": []
     }],
 

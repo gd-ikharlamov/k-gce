@@ -3,7 +3,16 @@
         "type": "docker",
         "image": "k-gce/base-java:latest",
         "pull": false,
-        "commit": "true"
+        "commit": "true",
+        "run_command": [
+            "-d",
+            "-t",
+            "-i",
+            "--tmpfs", "/run",
+            "--tmpfs", "/tmp",
+            "-v", "/sys/fs/cgroup:/sys/fs/cgroup:ro",
+            "{{.Image}}"
+        ]
     }],
 
     "provisioners": [{
