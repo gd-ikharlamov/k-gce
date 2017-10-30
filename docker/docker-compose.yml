@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+
+#docker run -d -t -i --tmpfs /run --tmpfs /tmp -v /sys/fs/cgroup:/sys/fs/cgroup:ro
+    centos-base:
+        build: ./centos-base
+        image: k-gce/centos-base:latest
+        container_name: centos-base
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        tmpfs:
+            - /run
+            - /tmp
+
+    sonar:
+        image: k-gce/sonar:latest
+        container_name: sonar
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        tmpfs:
+            - /run
+            - /tmp
+        ports:
+            - 9000:9000
