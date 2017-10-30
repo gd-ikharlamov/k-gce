@@ -1,2 +1,4 @@
 ---
 # vars file for mariadb
+query_cache_size: 15M
+innodb_buffer_pool_size: "{{ (ansible_memtotal_mb * 0.8) | int }}M"
