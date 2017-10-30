@@ -3,9 +3,11 @@ Description=SonarQube service
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
 ExecStart={{ sonarqube_dir }}/{{ sonarqube_version }}/bin/linux-x86-64/sonar.sh start
 ExecStop={{ sonarqube_dir }}/{{ sonarqube_version }}/bin/linux-x86-64/sonar.sh stop
+ExecReload={{ sonarqube_dir }}/{{ sonarqube_version }}/bin/linux-x86-64/sonar.sh restart
+PIDFile={{ sonarqube_dir }}/{{ sonarqube_version }}/bin/linux-x86-64/SonarQube.pid
 User=sonarqube
 Restart=on-abort
 

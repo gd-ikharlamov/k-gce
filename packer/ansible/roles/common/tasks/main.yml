@@ -1,10 +1,14 @@
 ---
 - name: upgrade all packages
   yum:
-    name: '*'
+    name: "*"
     state: latest
+  ignore_errors: yes
 
-- name: install unzip
+- name: install additional packages
   yum:
-    name: 'unzip'
+    name: "{{ item }}"
     state: present
+  with_items:
+      - unzip
+      - procps-ng

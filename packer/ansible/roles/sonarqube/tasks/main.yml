@@ -9,6 +9,8 @@
   unarchive:
     src: "{{ sonarqube_url }}"
     dest: "{{ sonarqube_dir }}"
+    owner: sonarqube
+    group: sonarqube
     remote_src: yes
 
 - name: copy sonarqube.service
