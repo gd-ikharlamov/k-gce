@@ -3,6 +3,9 @@ docker build ../docker/centos-base/ -t k-gce/centos-base:latest
 ./packer validate k-base-java9-docker.json
 ./packer build    k-base-java9-docker.json
 
+./packer validate k-mariadb-docker.json
+./packer build    k-mariadb-docker.json
+
 ./packer validate k-sonar-docker.json
 ./packer build    k-sonar-docker.json
 
@@ -11,4 +14,5 @@ docker build ../docker/centos-base/ -t k-gce/centos-base:latest
 ./terraform apply
 
 ./packer build    k-base-java9-docker.json && \
+./packer build    k-mariadb-docker.json && \
 ./packer build    k-sonar-docker.json
