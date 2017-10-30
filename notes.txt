@@ -5,3 +5,10 @@ docker build ../docker/centos-base/ -t k-gce/centos-base:latest
 
 ./packer validate k-sonar-docker.json
 ./packer build    k-sonar-docker.json
+
+./terraform init
+./terraform plan
+./terraform apply
+
+./packer build    k-base-java9-docker.json && \
+./packer build    k-sonar-docker.json

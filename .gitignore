@@ -1,4 +1,6 @@
 */packer
+*/*terraform
+*tfstate*
 *.pwi
 *.pwd
 *.hwm
