@@ -9,6 +9,7 @@ resource "docker_network" "private_network" {
 resource "docker_container" "mariadb" {
     image = "k-gce/mariadb:latest"
     name = "mariadb"
+    memory = "1024"
     networks = ["k-net"]
 }
 
