@@ -1,4 +1,6 @@
 ---
-# vars file for mariadb
+mysql_root_password: p@ssword
+sonarqube_user_passwort: p@ssword
+
 query_cache_size: 15M
 innodb_buffer_pool_size: "{{ (ansible_memtotal_mb * 0.8) | int }}M"

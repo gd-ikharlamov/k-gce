@@ -2,8 +2,11 @@
 # tasks file for mariadb
 - name: install MariaDB
   yum:
-    name: mariadb-server
+    name: "{{ item }}"
     state: present
+  with_items:
+    - mariadb-server
+    - python2-mysql
 
 - name: configure MariaDB
   template: src=sonarqube.cnf.j2 dest=/etc/my.cnf.d/sonarqube.cnf
@@ -11,4 +14,44 @@
 - name: enable MariaDB service
   systemd:
     name: mariadb
+    state: started
     enabled: yes
+
+- name: disallow root login remotely
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+  changed_when: false
+
+- name: remove test database and access to it
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - DROP DATABASE test
+    - DELETE FROM mysql.db WHERE Db LIKE 'test%'
+    - FLUSH PRIVILEGES
+  changed_when: false
+  ignore_errors: true
+
+- name: set root password
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    state: present
+
+- name: create sonarqube database
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: sonarqube
+    collation: utf8_bin
+    state: present
+
+- name: create sonarqube user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: sonarqube
+    password: "{{ sonarqube_user_passwort }}"
+    host: "*"
+    priv: "sonarqube.*:ALL"
+    state: present
