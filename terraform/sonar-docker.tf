@@ -2,12 +2,22 @@ provider "docker" {
   host = "unix:///var/run/docker.sock"
 }
 
-# resource "docker_image" "sonar" {
-#     name = "k-gce/sonar"
-#     keep_locally = true
-# }
+resource "docker_network" "private_network" {
+  name = "k-net"
+}
+
+resource "docker_container" "mariadb" {
+    image = "k-gce/mariadb:latest"
+    name = "mariadb"
+    networks = ["k-net"]
+}
 
 resource "docker_container" "sonar" {
     image = "k-gce/sonar:latest"
     name = "sonar"
+    networks = ["k-net"]
+    ports = {
+        internal = "9000"
+        external = "9000"
+    }
 }
