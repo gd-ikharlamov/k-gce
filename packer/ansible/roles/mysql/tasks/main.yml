@@ -1,26 +1,27 @@
 ---
-# tasks file for mariadb
-- name: install MariaDB
+# tasks file for mysql
+- name: install mysql
   yum:
     name: "{{ item }}"
     state: present
   with_items:
-    - mariadb-server
+    - http://repo.mysql.com/mysql57-community-release-el7.rpm
+    - mysql-server
     - python2-mysql
 
-- name: configure MariaDB
+- name: configure mysql
   template: src=sonarqube.cnf.j2 dest=/etc/my.cnf.d/sonarqube.cnf
 
-- name: enable MariaDB service
+- name: enable mysql service
   systemd:
-    name: mariadb
+    name: mysqld
     state: started
     enabled: yes
 
 - name: disallow root login remotely
   command: 'mysql -ne "{{ item }}"'
   with_items:
-    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost')
   changed_when: false
 
 - name: remove test database and access to it
@@ -32,10 +33,16 @@
   changed_when: false
   ignore_errors: true
 
+- name: delete anonymous mysql users
+  mysql_user:
+    user: ""
+    state: "absent"
+
 - name: set root password
   mysql_user:
     name: root
     password: "{{ mysql_root_password }}"
+    host: localhost
     state: present
 
 - name: create sonarqube database
@@ -51,7 +58,13 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
     user: sonarqube
-    password: "{{ sonarqube_user_passwort }}"
-    host: "*"
+    password: "{{ sonarqube_user_password }}"
+    host: "%"
     priv: "sonarqube.*:ALL"
     state: present
+
+- name: stop mysql service
+  systemd:
+    name: mysqld
+    state: stopped
+    enabled: yes

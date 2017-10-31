@@ -18,6 +18,12 @@
     src: "{{ role_path }}/templates/sonarqube.service.j2"
     dest: "/etc/systemd/system/sonarqube.service"
 
+- name: set Xmx in nexus.vmoptions
+  lineinfile:
+    path: /opt/sonatype/nexus/bin/nexus.vmoptions
+    regexp: "^-Xmx"
+    line: "-Xmx{{ nexus_Xmx }}"
+
 - name: enable sonarqube service
   systemd:
     name: sonarqube
