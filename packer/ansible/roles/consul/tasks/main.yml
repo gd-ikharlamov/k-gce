@@ -1,0 +1,23 @@
+---
+- name: create hashicorp directory
+  file:
+    path: /opt/hashicorp
+    state: directory
+    mode: 0755
+
+- name: "install {{ tool }}"
+  unarchive:
+    src: "{{ tool_url }}"
+    dest: /opt/hashicorp
+    remote_src: yes
+
+- name: "create {{ tool }} directory"
+  file:
+    path: "/opt/hashicorp/{{ tool }}"
+    state: file
+    mode: 0755
+
+- name: copy hashicorp profile
+  copy:
+    src: "{{ role_path }}/files/hashicorp.sh"
+    dest: "/etc/profile.d/hashicorp.sh"

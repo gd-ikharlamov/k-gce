@@ -1,0 +1,5 @@
+---
+# vars file for common
+tool: terraform
+tool_version: 0.10.8
+tool_url: "https://releases.hashicorp.com/{{ tool }}/{{ tool_version }}/{{ tool }}_{{ tool_version }}_linux_amd64.zip"
