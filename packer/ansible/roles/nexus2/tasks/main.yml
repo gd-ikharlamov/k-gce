@@ -1,0 +1,59 @@
+---
+- name: create nexus user
+  user:
+    name: nexus
+    state: present
+    home: {{ nexus_dir }}/
+
+- name: create nexus directory
+  file:
+    path: {{ nexus_dir }}
+    state: directory
+    mode: 0755
+
+- name: install nexus2
+  unarchive:
+    src: "{{ nexus_url }}"
+    dest: {{ nexus_dir }}
+    remote_src: yes
+
+# - name: set Xms in nexus.vmoptions
+#   lineinfile:
+#     path: {{ nexus_dir }}/{{ nexus_version }}//bin/{{ nexus_version }}/.vmoptions
+#     regexp: "^-Xms"
+#     line: "-Xms{{ nexus_Xms }}"
+#
+# - name: set Xmx in nexus.vmoptions
+#   lineinfile:
+#     path: {{ nexus_dir }}/{{ nexus_version }}//bin/{{ nexus_version }}/.vmoptions
+#     regexp: "^-Xmx"
+#     line: "-Xmx{{ nexus_Xmx }}"
+#
+# - name: set MaxDirectMemorySize in nexus.vmoptions
+#   lineinfile:
+#     path: {{ nexus_dir }}/{{ nexus_version }}//bin/{{ nexus_version }}/.vmoptions
+#     regexp: "^-XX:MaxDirectMemorySize"
+#     line: "-XX:MaxDirectMemorySize={{ nexus_MaxDirectMemorySize }}"
+#
+# - name: set karaf.data in nexus.vmoptions
+#   lineinfile:
+#     path: {{ nexus_dir }}/{{ nexus_version }}//bin/{{ nexus_version }}/.vmoptions
+#     regexp: "^-Dkaraf.data"
+#     line: "-Dkaraf.data={{ nexus_karaf_data }}"
+
+- name: change nexus directory owner
+  file:
+    dest: "{{ nexus_dir }}/"
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+- name: copy init-node.service
+  template:
+    src: "{{ role_path }}/templates/nexus.service.j2"
+    dest: /etc/systemd/system/
+
+- name: enable nexus service
+  systemd:
+    name: nexus
+    enabled: yes
