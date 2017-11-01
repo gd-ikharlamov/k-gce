@@ -18,11 +18,36 @@
     src: "{{ role_path }}/templates/sonarqube.service.j2"
     dest: "/etc/systemd/system/sonarqube.service"
 
-- name: set Xmx in nexus.vmoptions
-  lineinfile:
-    path: /opt/sonatype/nexus/bin/nexus.vmoptions
-    regexp: "^-Xmx"
-    line: "-Xmx{{ nexus_Xmx }}"
+- name: set sonarqube db name
+  replace:
+    path: "{{ sonarqube_dir }}/{{ sonarqube_version }}/conf/sonar.properties"
+    regexp: "^#sonar.jdbc.username="
+    replace: "sonar.jdbc.username=sonarqube"
+
+- name: set sonarqube db password
+  replace:
+    path: "{{ sonarqube_dir }}/{{ sonarqube_version }}/conf/sonar.properties"
+    regexp: "^#sonar.jdbc.password="
+    replace: "sonar.jdbc.password={{ sonarqube_user_passwort }}"
+
+- name: set sonarqube db url
+  replace:
+    path: "{{ sonarqube_dir }}/{{ sonarqube_version }}/conf/sonar.properties"
+    regexp: "^#sonar.jdbc.url=jdbc:mysql.*\n"
+    replace: "{{ sonar_jdbc_url }}"
+
+- name: tweak sysctl
+  sysctl:
+    name: vm.max_map_count
+    value: 262144
+    state: present
+  ignore_errors: yes
+
+- sysctl:
+    name: fs.file-max
+    value: 65536
+    state: present
+  ignore_errors: yes
 
 - name: enable sonarqube service
   systemd:

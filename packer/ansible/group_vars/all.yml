@@ -1,3 +1,5 @@
 ---
 mysql_root_password: p@ssword
 sonarqube_user_passwort: p@ssword
+
+db_ip: mysql
