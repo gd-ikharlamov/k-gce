@@ -1,16 +1,31 @@
 ---
 # tasks file for mysql
+- name: add mysql repository
+  yum:
+    name: "http://repo.mysql.com/mysql57-community-release-el7.rpm"
+    state: present
+
 - name: install mysql
   yum:
     name: "{{ item }}"
     state: present
   with_items:
-    - http://repo.mysql.com/mysql57-community-release-el7.rpm
-    - mysql-server
+    - mysql-community-server
     - python2-mysql
 
+- name: allow my.cnf includedir
+  lineinfile:
+    path: /etc/my.cnf
+    insertafter: '^pid-file'
+    line: "!includedir /etc/my.cnf.d"
+
 - name: configure mysql
-  template: src=sonarqube.cnf.j2 dest=/etc/my.cnf.d/sonarqube.cnf
+  template:
+    src: "sonarqube.cnf.j2"
+    dest: "/etc/my.cnf.d/sonarqube.cnf"
+
+- name: Initialize mysql datadir
+  command: "mysqld --initialize-insecure --user=mysql"
 
 - name: enable mysql service
   systemd:
@@ -18,32 +33,19 @@
     state: started
     enabled: yes
 
-- name: disallow root login remotely
-  command: 'mysql -ne "{{ item }}"'
-  with_items:
-    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost')
-  changed_when: false
-
-- name: remove test database and access to it
-  command: 'mysql -ne "{{ item }}"'
-  with_items:
-    - DROP DATABASE test
-    - DELETE FROM mysql.db WHERE Db LIKE 'test%'
-    - FLUSH PRIVILEGES
-  changed_when: false
-  ignore_errors: true
-
-- name: delete anonymous mysql users
-  mysql_user:
-    user: ""
-    state: "absent"
-
 - name: set root password
   mysql_user:
     name: root
     password: "{{ mysql_root_password }}"
     host: localhost
     state: present
+
+- name: delete anonymous mysql users
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: ""
+    state: "absent"
 
 - name: create sonarqube database
   mysql_db:

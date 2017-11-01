@@ -1,6 +1,6 @@
-resource "docker_container" "mariadb" {
-    image = "k-gce/mariadb:latest"
-    name = "mariadb"
+resource "docker_container" "mysql" {
+    image = "k-gce/mysql:latest"
+    name = "mysql"
     memory = "1024"
     networks = ["${docker_network.private_network.name}"]
 }
