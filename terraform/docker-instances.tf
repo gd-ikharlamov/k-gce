@@ -13,4 +13,5 @@ resource "docker_container" "sonar" {
         internal = "9000"
         external = "9000"
     }
+    depends_on = ["docker_container.mysql"]
 }
