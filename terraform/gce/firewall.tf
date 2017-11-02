@@ -7,5 +7,5 @@ resource "google_compute_firewall" "default" {
     ports    = ["9000"]
   }
 
-  source_tags = ["sonar"]
+  target_tags = ["sonarqube"]
 }

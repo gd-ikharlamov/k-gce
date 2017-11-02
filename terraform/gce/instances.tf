@@ -2,6 +2,7 @@ resource "google_compute_instance" "mysql" {
   name         = "mysql"
   machine_type = "${var.machine_type}"
   zone         = "${var.region}"
+  tags         = ["mysql"]
 
   boot_disk {
     initialize_params {
@@ -20,6 +21,7 @@ resource "google_compute_instance" "sonarqube" {
   name         = "sonarqube"
   machine_type = "${var.machine_type}"
   zone         = "${var.region}"
+  tags         = ["sonarqube"]
 
   boot_disk {
     initialize_params {
