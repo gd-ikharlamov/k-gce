@@ -8,4 +8,5 @@ resource "google_compute_firewall" "default" {
   }
 
   target_tags = ["sonarqube"]
+  source_ranges = ["0.0.0.0/0"]
 }
