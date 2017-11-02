@@ -11,7 +11,7 @@
     state: present
   with_items:
     - mysql-community-server
-    - python2-mysql
+    - MySQL-python
 
 - name: allow my.cnf includedir
   lineinfile:
