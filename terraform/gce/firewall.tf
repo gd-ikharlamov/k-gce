@@ -1,5 +1,5 @@
 resource "google_compute_firewall" "default" {
-  name    = "sonar"
+  name    = "sonarqube"
   network = "default"
 
   allow {
