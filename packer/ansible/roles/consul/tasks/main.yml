@@ -5,19 +5,37 @@
     state: directory
     mode: 0755
 
+- name: "create {{ tool }} user"
+  user:
+    name: "{{ tool }}"
+    state: present
+    home: "/opt/hashicorp/{{ tool }}/"
+
 - name: "install {{ tool }}"
   unarchive:
     src: "{{ tool_url }}"
-    dest: /opt/hashicorp
+    dest: /opt/hashicorp/
     remote_src: yes
 
-- name: "create {{ tool }} directory"
+- name: "create {{ tool }} directories"
   file:
-    path: "/opt/hashicorp/{{ tool }}"
-    state: file
+    path: "{{ item }}"
+    state: directory
     mode: 0755
+    owner: consul
+    group: consul
+  with_items:
+    - "/opt/hashicorp/{{ tool }}/data"
+    - "/opt/hashicorp/{{ tool }}/config/bootstrap"
+    - "/opt/hashicorp/{{ tool }}/config/server"
+    - "/opt/hashicorp/{{ tool }}/config/client"
 
-- name: copy hashicorp profile
+- name: "copy hashicorp profile"
   copy:
     src: "{{ role_path }}/files/hashicorp.sh"
     dest: "/etc/profile.d/hashicorp.sh"
+
+- name: "copy {{ tool }} unit files"
+  copy:
+    src: "{{ role_path }}/files/consul.service"
+    dest: "/etc/systemd/system/"

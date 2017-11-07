@@ -1,0 +1,13 @@
+[Unit]
+Description=Run the consul service as a daemon
+
+[Service]
+User=consul
+Group=consul
+Restart=on-failure
+PIDFile=/opt/hashicorp/consul/consul.pid
+ExecStart=/opt/hashicorp/consul/consul agent -pid-file /opt/hashicorp/consul/consul/consul.pid -server -config-dir=/opt/hashicorp/consul/config/server/
+ExecReload=/bin/kill -s HUP $MAINPID
+
+[Install]
+WantedBy = multi-user.target
