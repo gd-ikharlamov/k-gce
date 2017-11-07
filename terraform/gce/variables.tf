@@ -8,9 +8,19 @@ variable "project" {
   default = "dotted-music-184711"
 }
 
+variable "network" {
+  type    = "string"
+  default = "default"
+}
+
 variable "machine_type" {
   type    = "string"
   default = "g1-small"
+}
+
+variable "machine_type_consul" {
+  type    = "string"
+  default = "f1-micro"
 }
 
 variable "ssh_keys" {
