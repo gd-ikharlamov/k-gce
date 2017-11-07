@@ -14,7 +14,7 @@
 - name: "install {{ tool }}"
   unarchive:
     src: "{{ tool_url }}"
-    dest: /opt/hashicorp/
+    dest: "/opt/hashicorp/{{ tool }}/"
     remote_src: yes
 
 - name: "create {{ tool }} directories"
@@ -26,9 +26,7 @@
     group: consul
   with_items:
     - "/opt/hashicorp/{{ tool }}/data"
-    - "/opt/hashicorp/{{ tool }}/config/bootstrap"
     - "/opt/hashicorp/{{ tool }}/config/server"
-    - "/opt/hashicorp/{{ tool }}/config/client"
 
 - name: "copy hashicorp profile"
   copy:
@@ -39,3 +37,30 @@
   copy:
     src: "{{ role_path }}/files/consul.service"
     dest: "/etc/systemd/system/"
+
+# - name: "open consul ports"
+#   block:
+#   - firewalld:
+#       port: 8300-8302/tcp
+#       permanent: true
+#       state: enabled
+#
+#   - firewalld:
+#       port: 8500/tcp
+#       permanent: true
+#       state: enabled
+#
+#   - firewalld:
+#       port: 8600/tcp
+#       permanent: true
+#       state: enabled
+#
+#   - firewalld:
+#       port: 8301-8302/udp
+#       permanent: true
+#       state: enabled
+#
+#   - firewalld:
+#       port: 8600/udp
+#       permanent: true
+#       state: enabled
