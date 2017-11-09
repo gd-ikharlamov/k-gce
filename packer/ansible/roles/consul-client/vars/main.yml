@@ -1,0 +1,5 @@
+---
+# vars file for common
+tool: consul
+tool_version: 1.0.0
+tool_url: "https://releases.hashicorp.com/{{ tool }}/{{ tool_version }}/{{ tool }}_{{ tool_version }}_linux_amd64.zip"

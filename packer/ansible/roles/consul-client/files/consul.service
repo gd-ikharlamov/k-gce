@@ -1,0 +1,14 @@
+[Unit]
+Description=Run the consul service as a daemon
+Requires=network-online.target
+
+[Service]
+User=consul
+Restart=on-failure
+PIDFile=/opt/hashicorp/consul/consul.pid
+ExecStart=/opt/hashicorp/consul/consul agent -pid-file /opt/hashicorp/consul/consul.pid -config-dir=/opt/hashicorp/consul/config/client/
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy = multi-user.target
