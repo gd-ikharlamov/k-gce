@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the vault service as a daemon
+Requires=network-online.target
+
+[Service]
+User=vault
+Restart=on-failure
+ExecStart=/opt/hashicorp/vault/vault -config-dir=/opt/hashicorp/vault/config/server/
+
+[Install]
+WantedBy = multi-user.target
