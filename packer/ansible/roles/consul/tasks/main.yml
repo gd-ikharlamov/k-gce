@@ -37,30 +37,3 @@
   copy:
     src: "{{ role_path }}/files/consul.service"
     dest: "/etc/systemd/system/"
-
-# - name: "open consul ports"
-#   block:
-#   - firewalld:
-#       port: 8300-8302/tcp
-#       permanent: true
-#       state: enabled
-#
-#   - firewalld:
-#       port: 8500/tcp
-#       permanent: true
-#       state: enabled
-#
-#   - firewalld:
-#       port: 8600/tcp
-#       permanent: true
-#       state: enabled
-#
-#   - firewalld:
-#       port: 8301-8302/udp
-#       permanent: true
-#       state: enabled
-#
-#   - firewalld:
-#       port: 8600/udp
-#       permanent: true
-#       state: enabled
