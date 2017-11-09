@@ -84,6 +84,6 @@ resource "google_compute_instance" "consul" {
   }
 
   provisioner "local-exec" {
-    command = "cd ansible; ansible-playbook -u ikharlamov --private-key ~/.ssh/ikharlamov-nb -i '${self.network_interface.0.access_config.0.assigned_nat_ip},' consul.yml"
+    command = "cd ansible; ansible-playbook -u ikharlamov --private-key ~/.ssh/ikharlamov-nb -i '${self.network_interface.0.access_config.0.assigned_nat_ip},' consul-server.yml"
   }
 }

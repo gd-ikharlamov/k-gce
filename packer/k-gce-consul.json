@@ -18,7 +18,7 @@
 
     "provisioners": [{
         "type": "ansible",
-        "playbook_file": "./ansible/consul.yml",
+        "playbook_file": "./ansible/consul-server.yml",
         "ansible_env_vars": [],
         "extra_arguments": []
     }]

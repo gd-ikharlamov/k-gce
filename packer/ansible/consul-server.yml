@@ -2,4 +2,5 @@
 - hosts: all
   become: yes
   roles:
-      - consul
+      - common
+      - consul-server
