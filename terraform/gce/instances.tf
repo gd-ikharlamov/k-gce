@@ -1,7 +1,8 @@
 resource "google_compute_instance" "mysql" {
+  count        = 1
   name         = "mysql-${terraform.workspace}"
   machine_type = "${var.machine_type}"
-  zone         = "${var.region}"
+  zone         = "${element(var.zones, count.index)}"
   tags         = ["mysql"]
 
   boot_disk {
@@ -22,9 +23,10 @@ resource "google_compute_instance" "mysql" {
 
 resource "google_compute_instance" "sonarqube" {
   depends_on   = ["google_compute_instance.mysql"]
+  count        = 1
   name         = "sonarqube-${terraform.workspace}"
   machine_type = "${var.machine_type}"
-  zone         = "${var.region}"
+  zone         = "${element(var.zones, count.index)}"
   tags         = ["sonarqube"]
 
   boot_disk {
@@ -61,7 +63,7 @@ resource "google_compute_instance" "consul" {
   count        = 3
   name         = "consul-server-${count.index}"
   machine_type = "${var.machine_type_consul}"
-  zone         = "${var.region}"
+  zone         = "${element(var.zones, count.index)}"
   tags         = ["consul", "consul-server"]
 
   boot_disk {

@@ -1,6 +1,6 @@
 variable "region" {
   type    = "string"
-  default = "europe-west3-a"
+  default = "europe-west3"
 }
 
 variable "project" {
@@ -21,6 +21,12 @@ variable "machine_type" {
 variable "machine_type_consul" {
   type    = "string"
   default = "f1-micro"
+}
+
+variable "zones" {
+  description = "Run the EC2 Instances in these Availability Zones"
+  type = "list"
+  default = ["europe-west3-a", "europe-west3-b", "europe-west3-c"]
 }
 
 variable "ssh_keys" {
