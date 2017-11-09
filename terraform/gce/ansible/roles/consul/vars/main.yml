@@ -1,0 +1,4 @@
+---
+tool: consul
+consul_encrypt: oHcJVo2T0U3ag2BvacirSw==
+consul_nodes: 3

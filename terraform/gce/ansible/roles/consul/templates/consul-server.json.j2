@@ -1,0 +1,19 @@
+{
+    "bind_addr": "{{ ansible_default_ipv4.address }}",
+    "node_name": "{{ ansible_hostname }}",
+    "datacenter": "gce-k",
+    "server": true,
+    "data_dir": "/opt/hashicorp/consul/data",
+    "encrypt": "{{ consul_encrypt }}",
+    "log_level": "INFO",
+    "enable_syslog": true,
+    "bootstrap_expect": {{ consul_nodes }},
+    "leave_on_terminate": true,
+    "skip_leave_on_interrupt": false,
+    "rejoin_after_leave": true,
+    "addresses": {
+        "http": "0.0.0.0"
+    },
+    "retry_join": ["provider=gce tag_value=consul-server"],
+    "ui": true
+}

@@ -59,7 +59,7 @@ resource "google_compute_instance" "sonarqube" {
 
 resource "google_compute_instance" "consul" {
   count        = 3
-  name         = "consul-${count.index}"
+  name         = "consul-server-${count.index}"
   machine_type = "${var.machine_type_consul}"
   zone         = "${var.region}"
   tags         = ["consul", "consul-server"]
@@ -81,5 +81,9 @@ resource "google_compute_instance" "consul" {
 
   service_account {
     scopes = ["compute-ro"]
+  }
+
+  provisioner "local-exec" {
+    command = "cd ansible; ansible-playbook -u ikharlamov --private-key ~/.ssh/ikharlamov-nb -i '${self.network_interface.0.access_config.0.assigned_nat_ip},' consul.yml"
   }
 }

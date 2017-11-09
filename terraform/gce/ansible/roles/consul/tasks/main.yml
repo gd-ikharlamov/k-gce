@@ -1,0 +1,12 @@
+---
+- name: "copy {{ tool }} config"
+  template:
+    src: "{{ role_path }}/templates/consul-server.json.j2"
+    dest: "/opt/hashicorp/{{ tool }}/config/server/consul-server.json"
+    owner: consul
+
+- name: "enable {{ tool }} service"
+  systemd:
+    name: consul
+    state: started
+    enabled: yes
