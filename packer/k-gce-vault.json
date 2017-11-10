@@ -1,0 +1,25 @@
+{
+    "variables": {
+        "project_id": "dotted-music-184711",
+        "zone": "europe-west3-a"
+    },
+
+    "builders": [{
+        "type": "googlecompute",
+        "account_file": "packer-gce-account.json",
+        "project_id": "{{user `project_id`}}",
+        "source_image_family": "centos-7",
+        "ssh_username": "centos",
+        "image_name": "vault-{{timestamp}}",
+        "image_family": "k-gce-vault",
+        "image_description": "vault image",
+        "zone": "{{user `zone`}}"
+    }],
+
+    "provisioners": [{
+        "type": "ansible",
+        "playbook_file": "./ansible/vault.yml",
+        "ansible_env_vars": [],
+        "extra_arguments": []
+    }]
+}

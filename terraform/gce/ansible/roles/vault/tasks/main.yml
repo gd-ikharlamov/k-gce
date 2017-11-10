@@ -1,12 +1,12 @@
 ---
 - name: "copy {{ tool }} config"
   template:
-    src: "{{ role_path }}/templates/vault-server.json.j2"
-    dest: "/opt/hashicorp/{{ tool }}/config/server/vault-server.json"
+    src: "{{ role_path }}/templates/vault-server.hcl.j2"
+    dest: "/opt/hashicorp/{{ tool }}/config/vault-server.hcl"
     owner: consul
 
 - name: "enable {{ tool }} service"
   systemd:
-    name: vault
+    name: "{{ tool }}"
     state: started
     enabled: yes

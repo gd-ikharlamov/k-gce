@@ -5,19 +5,41 @@
     state: directory
     mode: 0755
 
+- name: "create {{ tool }} user"
+  user:
+    name: "{{ tool }}"
+    state: present
+    home: "/opt/hashicorp/{{ tool }}/"
+
 - name: "install {{ tool }}"
   unarchive:
     src: "{{ tool_url }}"
-    dest: /opt/hashicorp
+    dest: "/opt/hashicorp/{{ tool }}"
     remote_src: yes
 
-- name: "create {{ tool }} directory"
+- name: "create {{ tool }} directories"
   file:
-    path: "/opt/hashicorp/{{ tool }}"
-    state: file
+    path: "{{ item }}"
+    state: directory
     mode: 0755
+    owner: "{{ tool }}"
+    group: "{{ tool }}"
+  with_items:
+    - "/opt/hashicorp/{{ tool }}/data"
+    - "/opt/hashicorp/{{ tool }}/config/"
+
+- name: "allow mlock for {{ tool }} binary"
+  capabilities:
+    path: "/opt/hashicorp/{{ tool }}/{{ tool }}"
+    capability: cap_ipc_lock+ep
+    state: present
 
 - name: copy hashicorp profile
   copy:
     src: "{{ role_path }}/files/hashicorp.sh"
     dest: "/etc/profile.d/hashicorp.sh"
+
+- name: "copy {{ tool }} unit files"
+  copy:
+    src: "{{ role_path }}/files/{{ tool }}.service"
+    dest: "/etc/systemd/system/"

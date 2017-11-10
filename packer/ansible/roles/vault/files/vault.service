@@ -1,11 +1,14 @@
 [Unit]
 Description=Run the vault service as a daemon
-Requires=network-online.target
+Requires=network-online.target consul.service
 
 [Service]
 User=vault
 Restart=on-failure
-ExecStart=/opt/hashicorp/vault/vault -config-dir=/opt/hashicorp/vault/config/server/
+PIDFile=/opt/hashicorp/vault/vault.pid
+ExecStart=/opt/hashicorp/vault/vault server -config=/opt/hashicorp/vault/config/vault-server.hcl
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGINT
 
 [Install]
 WantedBy = multi-user.target

@@ -1,1 +1,1 @@
-export PATH=$PATH:/opt/hashicorp
+export PATH=$PATH:/opt/hashicorp/consul/:/opt/hashicorp/vault/
