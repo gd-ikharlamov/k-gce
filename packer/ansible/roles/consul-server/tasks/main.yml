@@ -35,5 +35,5 @@
 
 - name: "copy {{ tool }} unit files"
   copy:
-    src: "{{ role_path }}/files/consul.service"
+    src: "{{ role_path }}/files/{{ tool }}.service"
     dest: "/etc/systemd/system/"
