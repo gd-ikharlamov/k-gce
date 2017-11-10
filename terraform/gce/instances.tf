@@ -89,3 +89,35 @@ resource "google_compute_instance" "consul" {
     command = "cd ansible; ansible-playbook -u ikharlamov --private-key ~/.ssh/ikharlamov-nb -i '${self.network_interface.0.access_config.0.assigned_nat_ip},' consul-server.yml"
   }
 }
+
+resource "google_compute_instance" "vault" {
+  depends_on   = ["google_compute_instance.consul"]
+  count        = 3
+  name         = "vault-server-${count.index}"
+  machine_type = "${var.machine_type_consul}"
+  zone         = "${element(var.zones, count.index)}"
+  tags         = ["consul", "vault"]
+
+  boot_disk {
+    initialize_params {
+      image = "k-gce-vault"
+    }
+  }
+
+  network_interface {
+    network       = "${var.network}"
+    access_config = {}
+  }
+
+  metadata {
+    "ssh-keys" = "ikharlamov:${var.ssh_keys["ikharlamov"]}"
+  }
+
+  service_account {
+    scopes = ["compute-ro"]
+  }
+
+  provisioner "local-exec" {
+    command = "cd ansible; ansible-playbook -u ikharlamov --private-key ~/.ssh/ikharlamov-nb -i '${self.network_interface.0.access_config.0.assigned_nat_ip},' vault.yml"
+  }
+}
