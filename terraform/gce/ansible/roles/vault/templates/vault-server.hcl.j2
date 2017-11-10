@@ -1,0 +1,26 @@
+pid_file = "/opt/hashicorp/vault/vault.pid"
+
+storage "consul" {
+  address         = "127.0.0.1:8500"
+  path            = "vault/"
+  service         = "vault"
+  scheme          = "http"
+  # token           = "94c507b4-6be8-9132-ea15-3fc5b196ea29"
+  # scheme          = "https"
+  # tls_skip_verify = 0
+  # tls_key_file    = "/vault/ssl/vault.service.dj-wasabi.local.key"
+  # tls_cert_file   = "/vault/ssl/vault.service.dj-wasabi.local.crt"
+  # tls_ca_file     = "/vault/ssl/dj-wasabi.local.pem"
+
+  cluster_addr  = "http://{{ ansible_default_ipv4.address }}:8201"
+  redirect_addr = "http://{{ ansible_default_ipv4.address }}:8201"
+}
+
+listener "tcp" {
+  address         = "0.0.0.0:8200"
+  cluster_address = "0.0.0.0:8201"
+  tls_disable     = true
+
+  # tls_cert_file = "/etc/certs/vault.crt"
+  # tls_key_file  = "/etc/certs/vault.key"
+}
