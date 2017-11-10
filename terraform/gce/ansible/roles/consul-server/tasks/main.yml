@@ -7,6 +7,6 @@
 
 - name: "enable {{ tool }} service"
   systemd:
-    name: consul
+    name: "{{ tool }}"
     state: started
     enabled: yes
