@@ -8,3 +8,7 @@
 *.tar.*
 */run
 *-account.json
+*.key
+*.crt
+*.csr
+*.srl
