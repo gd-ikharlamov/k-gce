@@ -53,3 +53,20 @@ resource "google_compute_firewall" "consul" {
   target_tags   = ["consul"]
   source_ranges = ["0.0.0.0/0"]
 }
+
+resource "google_compute_firewall" "vault" {
+  name    = "${var.network}-vault"
+  network = "${var.network}"
+
+  allow {
+    protocol = "tcp"
+
+    ports = [
+      "8200",
+      "8201"
+    ]
+  }
+
+  target_tags   = ["vault"]
+  source_ranges = ["0.0.0.0/0"]
+}
