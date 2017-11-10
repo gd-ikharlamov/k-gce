@@ -22,8 +22,8 @@
     path: "{{ item }}"
     state: directory
     mode: 0755
-    owner: consul
-    group: consul
+    owner: "{{ tool }}"
+    group: "{{ tool }}"
   with_items:
     - "/opt/hashicorp/{{ tool }}/data"
     - "/opt/hashicorp/{{ tool }}/config/server"
