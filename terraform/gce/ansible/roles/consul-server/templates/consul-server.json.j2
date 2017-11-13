@@ -5,6 +5,11 @@
     "server": true,
     "data_dir": "/opt/hashicorp/consul/data",
     "encrypt": "{{ consul_encrypt }}",
+    "ca_file": "/opt/hashicorp/consul/certs/ca.crt",
+    "cert_file": "/opt/hashicorp/consul/certs/cert.crt",
+    "key_file": "/opt/hashicorp/consul/certs/cert.key",
+    "verify_incoming": true,
+    "verify_outgoing": true,
     "log_level": "INFO",
     "enable_syslog": true,
     "bootstrap_expect": {{ consul_nodes }},
@@ -12,7 +17,11 @@
     "skip_leave_on_interrupt": false,
     "rejoin_after_leave": true,
     "addresses": {
-        "http": "0.0.0.0"
+        "https": "0.0.0.0"
+    },
+    "ports": {
+        "https": 8500,
+        "http": -1
     },
     "retry_join": ["provider=gce tag_value=consul-server"],
     "ui": true
