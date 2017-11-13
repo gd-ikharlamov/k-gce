@@ -27,6 +27,44 @@
   with_items:
     - "/opt/hashicorp/{{ tool }}/data"
     - "/opt/hashicorp/{{ tool }}/config/server"
+    - "/opt/hashicorp/{{ tool }}/certs"
+
+- name: "install tls certs"
+  block:
+   - unarchive:
+      src: "{{ certs_url }}"
+      dest: "/opt/hashicorp/{{ tool }}/certs"
+      remote_src: yes
+      owner: "{{ tool }}"
+      group: "{{ tool }}"
+   - find:
+       paths: "/opt/hashicorp/{{ tool }}/certs"
+       patterns: "*.internal.crt"
+       recurse: no
+       file_type: file
+     register: internal_crt
+   - file:
+      src: "{{ item }}"
+      dest: "/opt/hashicorp/{{ tool }}/certs/cert.crt"
+      state: link
+      owner: "{{ tool }}"
+      group: "{{ tool }}"
+     with_items:
+       - "{{ internal_crt.files[0].path }}"
+   - find:
+       paths: "/opt/hashicorp/{{ tool }}/certs"
+       patterns: "*.internal.key"
+       recurse: no
+       file_type: file
+     register: internal_key
+   - file:
+      src: "{{ item }}"
+      dest: "/opt/hashicorp/{{ tool }}/certs/cert.key"
+      state: link
+      owner: "{{ tool }}"
+      group: "{{ tool }}"
+     with_items:
+       - "{{ internal_key.files[0].path }}"
 
 - name: "copy hashicorp profile"
   copy:
