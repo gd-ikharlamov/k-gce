@@ -31,5 +31,6 @@ openssl x509 -req -days 360 \
         -CAkey keys/ca.key \
         -CAcreateserial \
         -CAserial srl/ca.srl \
+        -extfile <(printf "subjectAltName=DNS:$NODE_NAME.c.$GCE_PROJECT.internal") \
         -in csrs/$NODE_NAME.c.$GCE_PROJECT.internal.csr \
         -out crts/$NODE_NAME.c.$GCE_PROJECT.internal.crt
