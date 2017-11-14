@@ -11,8 +11,8 @@ storage "consul" {
   tls_key_file    = "/opt/hashicorp/vault/certs/cert.key"
   tls_cert_file   = "/opt/hashicorp/vault/certs/cert.crt"
   tls_ca_file     = "/opt/hashicorp/vault/certs/ca.crt"
-  cluster_addr  = "http://{{ ansible_default_ipv4.address }}:8201"
-  redirect_addr = "http://{{ ansible_default_ipv4.address }}:8201"
+  cluster_addr  = "https://{{ ansible_default_ipv4.address }}:8201"
+  redirect_addr = "https://{{ ansible_default_ipv4.address }}:8201"
 }
 
 listener "tcp" {
