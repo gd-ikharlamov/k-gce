@@ -24,6 +24,19 @@ resource "google_compute_firewall" "mysql" {
   source_ranges = ["10.156.0.0/16"]
 }
 
+resource "google_compute_firewall" "nexus3" {
+  name    = "${var.network}-nexus3"
+  network = "${var.network}"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8081"]
+  }
+
+  target_tags   = ["nexus3"]
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_firewall" "consul" {
   name    = "${var.network}-consul"
   network = "${var.network}"
