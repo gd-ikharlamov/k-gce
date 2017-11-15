@@ -59,6 +59,29 @@ resource "google_compute_instance" "sonarqube" {
   }
 }
 
+resource "google_compute_instance" "nexus3" {
+  count        = 1
+  name         = "nexus3-${terraform.workspace}"
+  machine_type = "${var.machine_type}"
+  zone         = "${element(var.zones, count.index)}"
+  tags         = ["nexus3"]
+
+  boot_disk {
+    initialize_params {
+      image = "k-gce-nexus3"
+    }
+  }
+
+  network_interface {
+    network       = "${var.network}"
+    access_config = {}
+  }
+
+  metadata {
+    "ssh-keys" = "ikharlamov:${var.ssh_keys["ikharlamov"]}\n"
+  }
+}
+
 resource "google_compute_instance" "consul" {
   count        = 3
   name         = "consul-server-${count.index}"
