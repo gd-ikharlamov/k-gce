@@ -6,4 +6,4 @@ nexus_version: "{{ nexus_url | regex_search('(nexus-.*[0-9])') }}"
 nexus_Xms: 64M
 nexus_Xmx: 192M
 nexus_MaxDirectMemorySize: 190M
-nexus_karaf_data: /opt/sonatype/sonatype-work/nexus3
+nexus_karaf_data: /mnt/persistent/nexus3

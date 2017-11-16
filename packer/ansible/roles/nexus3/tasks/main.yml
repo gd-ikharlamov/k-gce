@@ -5,17 +5,6 @@
     state: present
     home: /opt/sonatype/
 
-- name: install JDK
-  yum:
-    name: java-1.8.0-openjdk-headless
-    state: latest
-
-- name: create nexus directory
-  file:
-    path: /opt/sonatype
-    state: directory
-    mode: 0755
-
 - name: install nexus3
   unarchive:
     src: "{{ nexus_url }}"
@@ -28,16 +17,12 @@
     dest: /opt/sonatype/nexus
     state: link
 
-- name: create nexus shared blobs directory
+- name: create nexus persistent data mount directory
   file:
-    path: /mnt/efs/nexus/blobs
+    path: /mnt/persistent/nexus3
     state: directory
-
-- name: create symlink to nexus blobs folder
-  file:
-    src: /mnt/efs/nexus/blobs
-    dest: /opt/sonatype/sonatype-work/nexus3/blobs
-    state: link
+    owner: nexus
+    group: nexus
 
 - name: set Xms in nexus.vmoptions
   lineinfile:
@@ -70,19 +55,7 @@
     group: nexus
     recurse: yes
 
-- name: change nexus efs directory owner
-  file:
-    dest: /mnt/efs/nexus
-    owner: nexus
-    group: nexus
-    recurse: yes
-
 - name: copy init-node.service
   copy:
     src: "{{ role_path }}/files/nexus.service"
     dest: /etc/systemd/system/
-
-- name: enable nexus service
-  systemd:
-    name: nexus
-    enabled: yes
