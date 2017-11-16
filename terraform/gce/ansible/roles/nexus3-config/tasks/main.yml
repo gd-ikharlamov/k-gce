@@ -1,0 +1,68 @@
+---
+- name: "waiting nexus to start up"
+  wait_for:
+    host: 127.0.0.1
+    port: 8081
+    sleep: 10
+    timeout: 300
+
+- name: "change admin password"
+  block:
+    - name: "upload update_admin_password script"
+      uri:
+        url: "http://localhost:8081/service/siesta/rest/v1/script"
+        user: "admin"
+        password: "{{ nexus_default_admin_password }}"
+        body_format: json
+        method: POST
+        force_basic_auth: yes
+        status_code: 204
+        body:
+          name: "update_admin_password"
+          type: 'groovy'
+          content: "{{ lookup('file', 'groovy/update_admin_password.groovy') }}"
+    - name: "run update_admin_password script"
+      uri:
+        url: "http://localhost:8081/service/siesta/rest/v1/script/update_admin_password/run"
+        user: "admin"
+        password: "{{ nexus_default_admin_password }}"
+        headers:
+          Content-Type: "text/plain"
+        method: POST
+        status_code: 200,204
+        force_basic_auth: yes
+        body: "{{ args | to_json }}"
+      vars:
+        args:
+          password: "{{ nexus_admin_password }}"
+
+- name: upload api scripts
+  include_tasks: upload-api-script.yml
+  with_items:
+    - update_admin_password
+    - delete_re po
+    - setup_ldap
+
+- name: delete default repositories
+  include_tasks: run-api-script.yml
+  vars:
+    script_name: delete_repo
+    args:
+      name: "{{ item }}"
+  with_items:
+    - maven-central
+    - maven-public
+    - maven-releases
+    - maven-snapshots
+    - nuget-group
+    - nuget-hosted
+    - nuget.org-proxy
+
+- name: delete default repositories
+  include_tasks: run-api-script.yml
+  vars:
+    script_name: delete_blobstore
+    args:
+      name: "{{ item }}"
+  with_items:
+    - default

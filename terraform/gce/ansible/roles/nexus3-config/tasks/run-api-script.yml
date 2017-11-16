@@ -1,0 +1,12 @@
+---
+- name: "Run {{ script_name }} script"
+  uri:
+    url: "http://localhost:8081/service/siesta/rest/v1/script/{{ groovy_script }}/run"
+    user: "admin"
+    password: "{{ nexus_admin_password }}"
+    headers:
+      Content-Type: "text/plain"
+    method: POST
+    status_code: 200,204
+    force_basic_auth: yes
+    body: "{{ args | to_json }}"

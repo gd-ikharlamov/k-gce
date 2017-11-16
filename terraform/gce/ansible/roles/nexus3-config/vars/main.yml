@@ -1,0 +1,5 @@
+---
+nexus_default_admin_password: admin123
+nexus_admin_password: p@ssword
+
+nexus_karaf_data: /mnt/persistent/nexus3
