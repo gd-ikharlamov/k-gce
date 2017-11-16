@@ -58,11 +58,17 @@ resource "google_compute_instance" "sonarqube" {
     ]
   }
 }
+resource "google_compute_disk" "nexus3" {
+  name = "nexus3-data-${terraform.workspace}"
+  type = "pd-standard"
+  zone = "${element(var.zones, count.index)}"
+  size = "${var.nexus3_disk_size}"
+}
 
 resource "google_compute_instance" "nexus3" {
   count        = 1
   name         = "nexus3-${terraform.workspace}"
-  machine_type = "${var.machine_type}"
+  machine_type = "custom-1-1024"
   zone         = "${element(var.zones, count.index)}"
   tags         = ["nexus3"]
 
@@ -72,6 +78,11 @@ resource "google_compute_instance" "nexus3" {
     }
   }
 
+  attached_disk {
+    source      = "${google_compute_disk.nexus3.name}"
+    device_name = "nexus3-data"
+  }
+
   network_interface {
     network       = "${var.network}"
     access_config = {}
@@ -79,6 +90,10 @@ resource "google_compute_instance" "nexus3" {
 
   metadata {
     "ssh-keys" = "ikharlamov:${var.ssh_keys["ikharlamov"]}\n"
+  }
+
+  provisioner "local-exec" {
+    command = "cd ansible; ansible-playbook -u ikharlamov --private-key ~/.ssh/ikharlamov-nb -i '${self.network_interface.0.access_config.0.assigned_nat_ip},' nexus3.yml"
   }
 }
 

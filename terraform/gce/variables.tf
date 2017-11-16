@@ -23,6 +23,12 @@ variable "machine_type_consul" {
   default = "f1-micro"
 }
 
+# in gb
+variable "nexus3_disk_size" {
+  type    = "string"
+  default = "1"
+}
+
 variable "zones" {
   description = "Run the EC2 Instances in these Availability Zones"
   type = "list"
