@@ -1,0 +1,26 @@
+---
+- name: create fs persistent disk for nexus data
+  filesystem:
+    fstype: "ext4"
+    dev: "/dev/disk/by-id/google-nexus3-data"
+    opts: "-m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard"
+
+- name: mount persistent disk for nexus data
+  mount:
+    path: /mnt/persistent/nexus3
+    src: "/dev/disk/by-id/google-nexus3-data"
+    fstype: "ext4"
+    state: mounted
+
+- name: change nexus data directory owner
+  file:
+    dest: "/mnt/persistent/nexus3/"
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+- name: start nexus service
+  systemd:
+    name: nexus
+    enabled: yes
+    state: started
