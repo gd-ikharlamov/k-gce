@@ -3,3 +3,25 @@ nexus_default_admin_password: admin123
 nexus_admin_password: p@ssword
 
 nexus_karaf_data: /mnt/persistent/nexus3
+
+nexus_default_port: 8081
+docker_hosted_port: 9080
+docker_proxy_port: 9081
+docker_group_port: 9082
+
+docker_blob_store: "{{ nexus_karaf_data }}/blobs/docker"
+
+docker_store_conf:
+  - blob_store: "{{ docker_blob_store }}"
+    strict_content_validation: true
+    version_policy: release
+    layout_policy: strict
+    write_policy: allow_once
+
+docker_proxy_conf:
+  - name: docker-proxy
+    http_port: "{{ docker_proxy_port }}"
+    v1_enabled: false
+    index_type: "HUB"
+    proxy_url: "https://registry.docker.io"
+    use_nexus_certificates_to_access_index: false

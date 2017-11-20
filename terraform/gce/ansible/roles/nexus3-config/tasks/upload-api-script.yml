@@ -1,12 +1,12 @@
 ---
-# - name: Removing (potential) previously declared Groovy script {{ item }}
-#   uri:
-#     url: "http://localhost:8081/service/siesta/rest/v1/script/{{ item }}"
-#     user: "admin"
-#     password: "{{ nexus_admin_password }}"
-#     method: DELETE
-#     force_basic_auth: yes
-#     status_code: 204,404
+- name: Removing previously uploaded script {{ item }}
+  uri:
+    url: "http://localhost:8081/service/siesta/rest/v1/script/{{ item }}"
+    user: 'admin'
+    password: "{{ nexus_admin_password }}"
+    method: DELETE
+    force_basic_auth: yes
+    status_code: 204,404
 
 - name: "upload groovy script {{ item }}"
   uri:

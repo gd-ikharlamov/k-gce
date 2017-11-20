@@ -1,7 +1,7 @@
 ---
 - name: "Run {{ script_name }} script"
   uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script/{{ groovy_script }}/run"
+    url: "http://localhost:8081/service/siesta/rest/v1/script/{{ script_name }}/run"
     user: "admin"
     password: "{{ nexus_admin_password }}"
     headers:
