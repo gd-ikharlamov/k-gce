@@ -36,7 +36,7 @@
         args:
           password: "{{ nexus_admin_password }}"
 
-- name: upload api scripts
+- name: "upload api scripts"
   include_tasks: upload-api-script.yml
   with_items:
     - update_admin_password
@@ -70,6 +70,34 @@
 #       name: "{{ item }}"
 #   with_items:
 #     - default
+
+- name: "add ldap configuration"
+  include_tasks: run-api-script.yml
+  vars:
+    script_name: setup_ldap
+    args:
+      name: "{{ ldap_name }}"
+      protocol: "{{ ldap_protocol }}"
+      hostname: "{{ ldap_hostname }}"
+      port: "{{ ldap_port }}"
+      auth: "{{ ldap_auth | default('none') }}"
+      username: "{{ ldap_auth_username | default('') }}"
+      password: "{{ ldap_auth_password | default('') }}"
+      search_base: "{{ ldap_search_base }}"
+      user_base_dn: "{{ ldap_user_base_dn | default('ou=users') }}"
+      user_ldap_filter: "{{ ldap_user_filter | default('') }}"
+      user_object_class: "{{ ldap_user_object_class }}"
+      user_id_attribute: "{{ ldap_user_id_attribute }}"
+      user_real_name_attribute: "{{ ldap_user_real_name_attribute }}"
+      user_email_attribute: "{{ ldap_user_email_attribute }}"
+      map_groups_as_roles: "{{ ldap_map_groups_as_roles | default(false) }}"
+      group_base_dn: "{{ ldap_group_base_dn | default('ou=groups') }}"
+      group_object_class: "{{ ldap_group_object_class | default('groupOfNames') }}"
+      group_id_attribute: "{{ ldap_group_id_attribute | default('cn') }}"
+      group_member_attribute: "{{ ldap_group_member_attribute | default('member') }}"
+      group_member_format: "{{ ldap_group_member_format | default('uid=${username},ou=users,dc=yourcompany') }}"
+      user_subtree: "{{ ldap_user_subtree | default(false) }}"
+      group_subtree: "{{ ldap_group_subtree | default(false) }}"
 
 - name: "create docker blob store"
   block:
