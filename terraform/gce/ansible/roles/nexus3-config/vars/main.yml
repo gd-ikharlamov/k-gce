@@ -56,3 +56,6 @@ ldap_conf:
   group_id_attribute: "cn"
   group_member_attribute: "memberOf"
   group_member_format: "${username}"
+  map_groups_as_roles: false
+  user_subtree: false
+  group_subtree: false

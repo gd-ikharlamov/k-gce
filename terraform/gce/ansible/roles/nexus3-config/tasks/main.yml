@@ -46,6 +46,9 @@
     - create_repo_docker_proxy
     - create_repo_docker_hosted
     - create_repo_docker_group
+    - setup_anonymous_access
+    - create_role
+    - create_task
 
 # - name: delete default repositories
 #   include_tasks: run-api-script.yml
@@ -98,6 +101,14 @@
       group_member_format: "{{ ldap_conf.group_member_format }}"
       user_subtree: "{{ ldap_conf.user_subtree }}"
       group_subtree: "{{ ldap_conf.group_subtree }}"
+
+- name: "disable anoinymous acces"
+  include_tasks: run-api-script.yml
+  vars:
+    script_name: setup_anonymous_access
+    args:
+      anonymous_access: false
+
 
 - name: "create docker blob store"
   block:
