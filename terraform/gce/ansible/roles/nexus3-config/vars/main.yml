@@ -9,6 +9,24 @@ docker_hosted_port: 9080
 docker_proxy_port: 9081
 docker_group_port: 9082
 
+nexus_privileges:
+  - name: read-all-repos
+    type: repository-view
+    description: "Read & Browse access to all repos"
+    repository: "*"
+    actions:
+      - read
+      - browse
+
+nexus_roles:
+  - id: Developpers
+    name: developers
+    description: "role for developers"
+    privileges:
+      - nx-search-read
+      - read-all-repos
+    roles: []
+
 docker_blob_store: "{{ nexus_karaf_data }}/blobs/docker"
 
 docker_store_conf:

@@ -48,7 +48,7 @@
     - create_repo_docker_group
     - setup_anonymous_access
     - create_role
-    - create_task
+    - create_privilege
 
 # - name: delete default repositories
 #   include_tasks: run-api-script.yml
@@ -109,6 +109,21 @@
     args:
       anonymous_access: false
 
+- name: "create priveledges"
+  include_tasks: run-api-script.yml
+  vars:
+    script_name: create_privilege
+    args: "{{ item }}"
+  with_items:
+      - "{{ nexus_privileges }}"
+
+- name: "create roles"
+  include_tasks: run-api-script.yml
+  vars:
+    script_name: create_role
+    args: "{{ item }}"
+  with_items:
+      - "{{ nexus_roles }}"
 
 - name: "create docker blob store"
   block:
