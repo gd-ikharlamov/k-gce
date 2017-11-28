@@ -1,0 +1,6 @@
+---
+- name: waiting for ssh connection
+  wait_for_connection:
+    delay: 5
+    sleep: 10
+    timeout: 300

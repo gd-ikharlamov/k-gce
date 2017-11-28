@@ -2,5 +2,6 @@
 - hosts: all
   become: yes
   roles:
+      - wait-for-ssh
       - nexus3-init
       - nexus3-config
