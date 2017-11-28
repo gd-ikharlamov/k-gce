@@ -13,3 +13,4 @@
 *.csr
 *.srl
 terraform/*/modules/*
+terraform/*/ansible/inventory/secrets.*
