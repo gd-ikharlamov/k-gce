@@ -1,7 +1,7 @@
 {
     "bind_addr": "{{ ansible_default_ipv4.address }}",
     "node_name": "{{ ansible_hostname }}",
-    "datacenter": "gce-k",
+    "datacenter": "{{ gce_region }}",
     "server": false,
     "data_dir": "/opt/hashicorp/consul/data",
     "encrypt": "{{ consul_encrypt }}",
@@ -16,7 +16,8 @@
     "skip_leave_on_interrupt": false,
     "rejoin_after_leave": true,
     "addresses": {
-        "https": "0.0.0.0"
+        "https": "0.0.0.0",
+        "http": "0.0.0.0"
     },
     "ports": {
         "https": 8500,
