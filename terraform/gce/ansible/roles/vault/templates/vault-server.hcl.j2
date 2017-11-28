@@ -17,7 +17,7 @@ storage "consul" {
 
 listener "tcp" {
   address         = "{{ ansible_fqdn }}:8200"
-  cluster_address = "0.0.0.0:8201"
+  cluster_address = "{{ ansible_fqdn }}:8201"
   tls_disable     = false
   tls_key_file    = "/opt/hashicorp/vault/certs/cert.key"
   tls_cert_file   = "/opt/hashicorp/vault/certs/cert.crt"
